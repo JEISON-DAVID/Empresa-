@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AcademicPro - Servicios Académicos de Excelencia</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .section {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .three-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .content-overlay {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.5);
+        }
+
+        .services-section {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .service-card.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .about-section {
+            background: linear-gradient(135deg, #8360c3 0%, #2ebf91 100%);
+            color: white;
+        }
+
+        .about-content {
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .about-content h2 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: all 0.8s ease;
+        }
+
+        .about-content h2.animate {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .about-content p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.8s ease;
+        }
+
+        .about-content p.animate {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .contact-section {
+            background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
+            color: white;
+        }
+
+        .contact-content {
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.8s ease;
+        }
+
+        .contact-form.animate {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-book {
+            position: absolute;
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.3);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-book:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .floating-book:nth-child(2) { top: 60%; right: 10%; animation-delay: 2s; }
+        .floating-book:nth-child(3) { bottom: 20%; left: 20%; animation-delay: 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 20px rgba(255, 107, 107, 0.5); }
+            100% { text-shadow: 0 0 30px rgba(78, 205, 196, 0.8); }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: particle 8s linear infinite;
+        }
+
+        @keyframes particle {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.5rem; }
+            .hero-subtitle { font-size: 1.2rem; }
+            .services-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="section hero-section">
+        <div class="three-container" id="hero-three"></div>
+        <div class="content-overlay">
+            <h1 class="hero-title">AcademicPro</h1>
+            <p class="hero-subtitle">Servicios Académicos de Excelencia para Estudiantes Universitarios</p>
+            <a href="#services" class="cta-button">Descubre Nuestros Servicios</a>
+        </div>
+        <div class="floating-elements">
+            <div class="floating-book">📚</div>
+            <div class="floating-book">🎓</div>
+            <div class="floating-book">📖</div>
+        </div>
+        <div class="scroll-indicator">↓</div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="section services-section" id="services">
+        <div class="three-container" id="services-three"></div>
+        <div class="content-overlay">
+            <h2 style="text-align: center; font-size: 3rem; margin-bottom: 3rem;">Nuestros Servicios</h2>
+            <div class="services-grid">
+                <div class="service-card" data-animate="services">
+                    <div class="service-icon">📝</div>
+                    <h3>Ensayos Académicos</h3>
+                    <p>Redacción profesional de ensayos para todas las disciplinas universitarias con metodología rigurosa y fuentes confiables.</p>
+                </div>
+                <div class="service-card" data-animate="services">
+                    <div class="service-icon">🔬</div>
+                    <h3>Trabajos de Física</h3>
+                    <p>Resolución de problemas complejos, laboratorios, reportes y proyectos de física con análisis detallado.</p>
+                </div>
+                <div class="service-card" data-animate="services">
+                    <div class="service-icon">🏗️</div>
+                    <h3>Proyectos de Arquitectura</h3>
+                    <p>Diseño arquitectónico, planos técnicos, maquetas digitales y presentaciones profesionales.</p>
+                </div>
+                <div class="service-card" data-animate="services">
+                    <div class="service-icon">📊</div>
+                    <h3>Investigación Académica</h3>
+                    <p>Investigaciones profundas con metodología científica, análisis estadístico y bibliografía especializada.</p>
+                </div>
+                <div class="service-card" data-animate="services">
+                    <div class="service-icon">💼</div>
+                    <h3>Proyectos de Grado</h3>
+                    <p>Tesis, tesinas y proyectos de graduación con acompañamiento personalizado desde la idea hasta la defensa.</p>
+                </div>
+                <div class="service-card" data-animate="services">
+                    <div class="service-icon">🎯</div>
+                    <h3>Asesorías Especializadas</h3>
+                    <p>Tutorías personalizadas y consultoría académica para materias específicas y proyectos complejos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section about-section" id="about">
+        <div class="three-container" id="about-three"></div>
+        <div class="content-overlay">
+            <div class="about-content">
+                <h2 data-animate="about">¿Quiénes Somos?</h2>
+                <p data-animate="about">Somos un equipo de profesionales especializados en diferentes áreas académicas, comprometidos con la excelencia educativa. Nuestro objetivo es apoyar a estudiantes universitarios en el desarrollo de trabajos de alta calidad que cumplan con los más altos estándares académicos.</p>
+                <p data-animate="about">Con años de experiencia en el campo educativo, ofrecemos servicios personalizados que se adaptan a las necesidades específicas de cada estudiante, garantizando originalidad, calidad y puntualidad en cada entrega.</p>
+                <p data-animate="about">Trabajamos con metodologías probadas y utilizamos las últimas herramientas tecnológicas para asegurar que cada proyecto refleje el nivel de excelencia que tu carrera universitaria merece.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section contact-section" id="contact">
+        <div class="three-container" id="contact-three"></div>
+        <div class="content-overlay">
+            <div class="contact-content">
+                <h2 style="font-size: 3rem; margin-bottom: 2rem;">Contáctanos</h2>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem;">¿Tienes un proyecto académico? Estamos aquí para ayudarte a alcanzar tus objetivos educativos.</p>
+                <form class="contact-form" data-animate="contact">
+                    <div class="form-group">
+                        <label for="nombre">Nombre Completo</label>
+                        <input type="text" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="carrera">Carrera Universitaria</label>
+                        <input type="text" id="carrera" name="carrera" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="servicio">Tipo de Servicio</label>
+                        <select id="servicio" name="servicio" style="width: 100%; padding: 0.8rem; border: none; border-radius: 10px; background: rgba(255, 255, 255, 0.9); font-size: 1rem;">
+                            <option value="">Selecciona un servicio</option>
+                            <option value="ensayo">Ensayo Académico</option>
+                            <option value="fisica">Trabajo de Física</option>
+                            <option value="arquitectura">Proyecto de Arquitectura</option>
+                            <option value="investigacion">Investigación Académica</option>
+                            <option value="tesis">Proyecto de Grado</option>
+                            <option value="asesoria">Asesoría Especializada</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="mensaje">Describe tu proyecto</label>
+                        <textarea id="mensaje" name="mensaje" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="cta-button">Solicitar Cotización</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Intersection Observer para animaciones
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const animationType = entry.target.dataset.animate;
+                    
+                    if (animationType === 'services') {
+                        setTimeout(() => {
+                            entry.target.classList.add('animate');
+                        }, Math.random() * 500);
+                    } else if (animationType === 'about') {
+                        setTimeout(() => {
+                            entry.target.classList.add('animate');
+                        }, 200);
+                    } else if (animationType === 'contact') {
+                        setTimeout(() => {
+                            entry.target.classList.add('animate');
+                        }, 300);
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observar elementos animables
+        document.querySelectorAll('[data-animate]').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Crear partículas animadas
+        function createParticles() {
+            const body = document.body;
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                body.appendChild(particle);
+            }
+        }
+
+        // Escenas Three.js para cada sección
+        function createThreeScene(containerId, sceneType) {
+            const container = document.getElementById(containerId);
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x000000, 0);
+            container.appendChild(renderer.domElement);
+
+            // Geometrías y materiales según el tipo de escena
+            const objects = [];
+            
+            if (sceneType === 'hero') {
+                // Esferas flotantes para hero
+                for (let i = 0; i < 20; i++) {
+                    const geometry = new THREE.SphereGeometry(0.1, 32, 32);
+                    const material = new THREE.MeshBasicMaterial({ 
+                        color: new THREE.Color().setHSL(Math.random(), 0.7, 0.6),
+                        transparent: true,
+                        opacity: 0.8
+                    });
+                    const sphere = new THREE.Mesh(geometry, material);
+                    sphere.position.set(
+                        (Math.random() - 0.5) * 10,
+                        (Math.random() - 0.5) * 10,
+                        (Math.random() - 0.5) * 10
+                    );
+                    scene.add(sphere);
+                    objects.push(sphere);
+                }
+            } else if (sceneType === 'services') {
+                // Cubos rotantes para servicios
+                for (let i = 0; i < 15; i++) {
+                    const geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+                    const material = new THREE.MeshBasicMaterial({ 
+                        color: new THREE.Color().setHSL(0.6, 0.8, 0.5),
+                        transparent: true,
+                        opacity: 0.6
+                    });
+                    const cube = new THREE.Mesh(geometry, material);
+                    cube.position.set(
+                        (Math.random() - 0.5) * 8,
+                        (Math.random() - 0.5) * 8,
+                        (Math.random() - 0.5) * 8
+                    );
+                    scene.add(cube);
+                    objects.push(cube);
+                }
+            } else if (sceneType === 'about') {
+                // Toros para about
+                for (let i = 0; i < 10; i++) {
+                    const geometry = new THREE.TorusGeometry(0.3, 0.1, 16, 100);
+                    const material = new THREE.MeshBasicMaterial({ 
+                        color: new THREE.Color().setHSL(0.3, 0.7, 0.6),
+                        transparent: true,
+                        opacity: 0.7
+                    });
+                    const torus = new THREE.Mesh(geometry, material);
+                    torus.position.set(
+                        (Math.random() - 0.5) * 6,
+                        (Math.random() - 0.5) * 6,
+                        (Math.random() - 0.5) * 6
+                    );
+                    scene.add(torus);
+                    objects.push(torus);
+                }
+            } else if (sceneType === 'contact') {
+                // Octaedros para contact
+                for (let i = 0; i < 12; i++) {
+  const geometry = new THREE.OctahedronGeometry(0.2);
+  const material = new THREE.MeshBasicMaterial({
+    color: new THREE.Color().setHSL(0.8, 0.6, 0.7),
+    transparent: true,
+    opacity: 0.8
+  });
+  const octahedron = new THREE.Mesh(geometry, material);
+  octahedron.position.set(
+    (Math.random() - 0.5) * 7,
+    (Math.random() - 0.5) * 7,
+    (Math.random() - 0.5) * 7
+  );
+  scene.add(octahedron);
+  objects.push(octahedron);
+}
+}
+
+camera.position.z = 5;
+
+// Animación
+function animate() {
+  requestAnimationFrame(animate);
+  
+  objects.forEach((obj, index) => {
+    obj.rotation.x += 0.01;
+    obj.rotation.y += 0.02;
+    
+    // Movimiento flotante
+    obj.position.y += Math.sin(Date.now() * 0.001 + index) * 0.001;
+    obj.position.x += Math.cos(Date.now() * 0.001 + index) * 0.001;
+  });
+  
+  renderer.render(scene, camera);
+}
+
+animate();
+
+// Redimensionar
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+}
+
+// Inicializar escenas 3D
+document.addEventListener('DOMContentLoaded', () => {
+  createThreeScene('hero-three', 'hero');
+  createThreeScene('services-three', 'services');
+  createThreeScene('about-three', 'about');
+  createThreeScene('contact-three', 'contact');
+  createParticles();
+});
+
+// Scroll suave
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  });
+});
+
+// Formulario de contacto
+document.querySelector('.contact-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  alert('¡Gracias por contactarnos! Te responderemos pronto con una cotización personalizada.');
+});
+</script> </body> </html>
